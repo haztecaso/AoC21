@@ -32,7 +32,16 @@ class Submarine():
     position: Position = Position()
     aim: int = 0
 
-def runCommand(submarine, command):
+def runCommandPart1(position, command):
+    command_name, value = command
+    if command_name == CommandName.FORWARD:
+        position.horizontal += value
+    elif command_name == CommandName.UP:
+        position.depth -= value
+    elif command_name == CommandName.DOWN:
+        position.depth += value
+
+def runCommandPart2(submarine, command):
     command_name, value = command
     if command_name == CommandName.FORWARD:
         submarine.position.horizontal += value
@@ -48,8 +57,14 @@ with open("input", "r") as f:
 
 commands = [parseCommand(line) for line in lines]
 
+position = Position()
+for command in commands:
+    runCommandPart1(position, command)
+
+print("Result part 1:", position.horizontal * position.depth)
+
 submarine = Submarine()
 for command in commands:
-    runCommand(submarine, command)
+    runCommandPart2(submarine, command)
 
-print(submarine.position.horizontal * submarine.position.depth)
+print("Result part 2:", submarine.position.horizontal * submarine.position.depth)
