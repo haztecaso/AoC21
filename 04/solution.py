@@ -60,7 +60,7 @@ with open("input", "r") as f:
     boards = "".join(f.readlines()).split("\n\n")
     boards = [Board([[ Number(int(num)) for num in row.split()] for row in board.strip().split("\n")]) for board in boards]
 
-def main(number_list, boards):
+def part1(number_list, boards):
     for number in number_list:
         for board in boards:
             board.mark(number)
@@ -68,4 +68,21 @@ def main(number_list, boards):
                 print("Result part 1:", board.score*number)
                 return
 
-main(number_list, boards)
+def part2(number_list, boards):
+    last_board = None
+    for number in number_list:
+        if not last_board:
+            for board in boards:
+                board.mark(number)
+            left_boards = list(filter(lambda b: not b.win, boards))
+            if len(left_boards) == 1:
+                last_board = left_boards[0]
+        else:
+            last_board.mark(number)
+            if last_board.win:
+                print("Result part 2:", last_board.score*number)
+                return
+
+
+part1(number_list, boards)
+part2(number_list, boards)
