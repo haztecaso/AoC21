@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from itertools import chain
+from math import sqrt
 
 @dataclass
 class Pt():
@@ -10,6 +11,19 @@ class Pt():
 
     def __repr__(self):
         return f"({self.x},{self.y})"
+
+    @property
+    def unit(self):
+        assert abs(self.x) == abs(self.y)
+        x = self.x / abs(self.x)
+        y = self.y / abs(self.y)
+        return Pt(int(x),int(y))
+
+    def __sub__(self, other):
+        x = self.x - other.x
+        y = self.y - other.y
+        return Pt(x, y)
+
 
 def line_range(a,b):
     return range(min(a,b), max(a,b)+1)
@@ -20,7 +34,7 @@ class Ln():
     b:Pt
 
     def __repr__(self):
-        return f"{self.a}-{self.b}"
+        return f"{self.a}̣—{self.b}"
 
     @property
     def is_horizontal(self):
@@ -31,6 +45,14 @@ class Ln():
         return self.a.x == self.b.x
 
     @property
+    def direction(self):
+        return self.b - self.a
+
+    @property
+    def is_diagonal(self):
+        return abs(self.direction.x) == abs(self.direction.y)
+
+    @property
     def points(self):
         result = []
         if self.is_horizontal:
@@ -39,6 +61,11 @@ class Ln():
         elif self.is_vertical:
             for y in line_range(self.a.y, self.b.y):
                 result.append(Pt(self.a.x, y))
+        elif self.is_diagonal:
+            dist = abs(self.direction.x)
+            m = self.direction.unit
+            for d in line_range(0, dist):
+                result.append(Pt(self.a.x + d*m.x, self.a.y + d*m.y))
         return result
 
 
@@ -94,8 +121,17 @@ def lines_corner(lines):
 def part1(lines):
     table_size = list(map(lambda x: x+1, lines_corner(lines)))
     table = Table(table_size)
-    table.mark_lines(lines)
+    table.mark_lines(filter(lambda ln: ln.is_vertical or ln.is_horizontal, lines))
     print("Result part 1:", table.overlaps)
 
-lines = parse_input("example")
+def part2(lines):
+    table_size = list(map(lambda x: x+1, lines_corner(lines)))
+    table = Table(table_size)
+    line = parse_ln("5,5 -> 8,2")
+    for line in lines:
+        table.mark_line(line)
+    print("Result part 2:", table.overlaps)
+
+lines = parse_input("input")
 part1(lines)
+part2(lines)
