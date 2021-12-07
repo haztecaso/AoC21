@@ -9,16 +9,12 @@ def align_to_position_v1(reference, positions):
 
 def fuel_distance(a,b): # (triangular sum)
     n = abs(a-b)
-    # print(f"{(a,b)=}; {n=}; {n*(n+1)/2=}")
     return n*(n+1)/2
 
-
 def align_to_position_v2(reference, positions):
-    result = reduce(lambda x, y: x+y,
+    return reduce(lambda x, y: x+y,
             map(lambda position: fuel_distance(reference, position), positions)
            )
-    # print(f"{reference = } {result = }")
-    return result
 
 def parse_input(filename):
     with open(filename, "r") as f:
