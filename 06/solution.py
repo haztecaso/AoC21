@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 
-from dataclasses import dataclass
+from functools import reduce
 
-@dataclass
-class LanternFish():
-    clock:int = 8
+class School():
+    fishes:dict = {key:0 for key in range(9)}
+
+    def pass_time(self):
+        new_generation = self.fishes[0]
+        for key in range(1,9):
+            self.fishes[key - 1] = self.fishes[key]
+        self.fishes[6] += new_generation
+        self.fishes[8] = new_generation
     
-    def pass_time(self, school):
-        if self.clock == 0:
-            self.clock = 6
-            school.append(LanternFish())
-        else:
-            self.clock -= 1
+    @property
+    def count(self):
+        return reduce(lambda a,b: a+b, self.fishes.values())
 
     def __repr__(self):
-        return str(self.clock)
+        return str(self.fishes)
 
 def parse_input(filename):
     with open(filename, "r") as f:
@@ -22,17 +25,14 @@ def parse_input(filename):
     clocks = [int(n) for n in line.split(",")]
     return clocks
 
-
-def part1(clocks, days):
-    school = []
+def solve(clocks, days):
+    school = School()
     for clock in clocks:
-        school.append(LanternFish(clock))
-    for i in range(days):
-        for k in range(len(school)):
-            school[k].pass_time(school)
-        print(f"{i}:",len(school))
-    print("final len:", len(school))
-
+        school.fishes[clock] += 1
+    for _ in range(days):
+        school.pass_time()
+    return(school.count)
 
 clocks = parse_input("input")
-part1(clocks, 80)
+print("Result part 1:", solve(clocks, 80))
+print("Result part 2:", solve(clocks, 256))
