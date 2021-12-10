@@ -6,10 +6,12 @@ def parse_input(filename):
     return lines
 
 def part1():
-    raise NotImplementedError
+    return
+    print("Result part 1:" )
 
 def part2():
-    raise NotImplementedError
+    return
+    print("Result part 2:" )
 
 entries = parse_input("input")
 part1()

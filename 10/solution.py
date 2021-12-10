@@ -3,7 +3,7 @@
 chars = { "(": ")", "{": "}", "[": "]", "<": ">" }
 points = {")": 3, "]": 57, "}": 1197, ">": 25137}
 scores = {")": 1, "]": 2, "}": 3, ">": 4}
-        
+
 def parse_input(filename):
     with open(filename, "r") as f:
         lines = f.readlines()
