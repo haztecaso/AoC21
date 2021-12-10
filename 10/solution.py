@@ -56,8 +56,6 @@ def part2(incomplete_segments):
     assert len(scores) % 2 == 1
     print("Result part 2:", scores[len(scores) // 2])
 
-
-
 lines = parse_input("input")
 incomplete_segments = part1(lines)
 part2(incomplete_segments)
